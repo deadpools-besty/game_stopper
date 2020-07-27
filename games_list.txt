@@ -1,0 +1,14 @@
+mgsvtpp.exe
+AER.exe
+NFS14.exe
+NBA2K19.exe
+GTA5.exe
+AC4BFSP.exe
+AC4BFMP.exe
+FarCry5.exe
+NFS13.exe
+FIFA20.exe
+MgsGroundZeroes.exe
+JustCause4.exe
+BorderlandsPreSequel.exe
+MK11.exe
