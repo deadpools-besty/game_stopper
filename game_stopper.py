@@ -21,12 +21,13 @@ import sqlite3
 
 def main():
 
-    database = "game_time.db"
+    database = "game_times.db"
     exe_names = "games_list.txt"
     conn = sqlite3.connect(database)
     cursor = conn.cursor()
-    games_list = get_games_list("games_list.txt")
+    games_list = get_games_list(exe_names)
     print (games_list)
+    active_gaming = False
 
     i = 0
 
@@ -37,10 +38,14 @@ def main():
         w.GetWindowText(w.GetForegroundWindow())
         pid = win32.win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
         
-        current_exe_name = psutil.Process(pid[-1]).name()
-        if current_exe_name in exe_names:
+        current_exe_name = psutil.Process(pid[-1]).name().strip()
+
+        print(active_gaming, current_exe_name)
+
+        if current_exe_name in games_list and active_gaming == False:
             record_game_start(conn, cursor, current_exe_name)
-            print(current_exe_name)
+            active_gaming = True
+        
         
     
     return
@@ -56,7 +61,7 @@ def get_games_list(games_path):
     
     games_list = []
     for line in games_file:
-        strip_line = line.strip('\n')
+        strip_line = line.strip()
         games_list.append(strip_line)
 
 
@@ -72,7 +77,7 @@ def pause_game():
 
 def record_game_start(conn: sqlite3.Connection, cursor: sqlite3.Cursor, exe_name: str):
 
-    cursor.execute('''insert into gaming values (?, julianday('now'))''', (exe_name))
+    cursor.execute('''insert into gaming values (?, julianday('now'), NULL, NULL);''', (exe_name,))
     conn.commit()
 
 
