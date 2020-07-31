@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 ''' 
 python application that runs in the background to track the amount of time i've spent in games for
 the day week or month to limit my play time once school starts 
@@ -6,6 +7,7 @@ future: could auto pause application once time limit is reached
 
 could store data using a sql database -  different tables for each game, and in those tables time played
 is listed and then there is a table for overall game sessions for the week
+
 '''
 
 import win32.win32gui
@@ -16,7 +18,7 @@ import subprocess
 import psutil
 from pynput.keyboard import Key, Controller
 import sqlite3
-
+__max_time__ = 24
 
 
 def main():
@@ -47,7 +49,6 @@ def main():
             active_gaming = True
         
         
-    
     return
 
 

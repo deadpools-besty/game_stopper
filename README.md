@@ -1,0 +1,1 @@
+This way I hopefully will be able to manage my time better especially with online classes
