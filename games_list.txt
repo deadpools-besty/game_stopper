@@ -12,3 +12,4 @@ MgsGroundZeroes.exe
 JustCause4.exe
 BorderlandsPreSequel.exe
 MK11.exe
+Code.exe

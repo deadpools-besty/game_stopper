@@ -14,12 +14,72 @@ import time
 import os
 import subprocess
 import psutil
+from pynput.keyboard import Key, Controller
+import sqlite3
 
-i = 0
 
-while i <= 1:
-    time.sleep(3)
-    w = win32.win32gui
-    w.GetWindowText(w.GetForegroundWindow())
-    pid = win32.win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
-    print(psutil.Process(pid[-1]).name())
+
+def main():
+
+    database = "game_time.db"
+    exe_names = "games_list.txt"
+    conn = sqlite3.connect(database)
+    cursor = conn.cursor()
+    games_list = get_games_list("games_list.txt")
+    print (games_list)
+
+    i = 0
+
+    while i <= 1:
+        
+        time.sleep(3)
+        w = win32.win32gui
+        w.GetWindowText(w.GetForegroundWindow())
+        pid = win32.win32process.GetWindowThreadProcessId(w.GetForegroundWindow())
+        
+        current_exe_name = psutil.Process(pid[-1]).name()
+        if current_exe_name in exe_names:
+            record_game_start(conn, cursor, current_exe_name)
+            print(current_exe_name)
+        
+    
+    return
+
+
+def check_game_times():
+
+    return
+
+def get_games_list(games_path):
+
+    games_file = open(games_path, 'r')
+    
+    games_list = []
+    for line in games_file:
+        strip_line = line.strip('\n')
+        games_list.append(strip_line)
+
+
+    return games_list
+
+def pause_game():
+
+    keyboard = Controller()
+    keyboard.press(Key.esc)
+    keyboard.release(Key.esc)
+
+    return
+
+def record_game_start(conn: sqlite3.Connection, cursor: sqlite3.Cursor, exe_name: str):
+
+    cursor.execute('''insert into gaming values (?, julianday('now'))''', (exe_name))
+    conn.commit()
+
+
+    return
+
+def record_game_end():
+
+    # will also calculate time of game period
+    return
+main()
