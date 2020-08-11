@@ -14,3 +14,9 @@ LIMIT 1;
 
  SELECT * from gaming
  ORDER by session_end desc;
+
+ -- query for getting playtime
+
+select sum(time_played)*24 as hours played
+from gaming
+where session_start >= julianday('now', '-7 days');

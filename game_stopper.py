@@ -49,6 +49,10 @@ def main():
         if current_exe_name in games_list and active_gaming == False:
             record_game_start(conn, cursor, current_exe_name)
             active_gaming = True
+            week_game_time = get_week_game_time(conn, cursor)
+
+            # need to calculate how long the current game has been running and add that to week game
+            # to see if over the limit 
         
         
     return
@@ -58,8 +62,14 @@ def get_week_game_time(conn: sqlite3.Connection, cursor: sqlite3.Cursor):
 
     # return total playtime over the past week
 
+    cursor.execute('''select sum(time_played)*24 as hours played
+    from gaming
+    where session_start >= julianday('now', '-7 days');''')
+
+    time_played_in_past_week = cursor.fetchone()
+    print(time_played_in_past_week)
     
-    return
+    return time_played_in_past_week
 
 def get_games_list(games_path):
 
