@@ -18,6 +18,8 @@ import subprocess
 import psutil
 from pynput.keyboard import Key, Controller
 import sqlite3
+import julian
+import datetime
 __max_time__ = 24
 
 
@@ -52,8 +54,11 @@ def main():
     return
 
 
-def check_game_times():
+def get_week_game_time(conn: sqlite3.Connection, cursor: sqlite3.Cursor):
 
+    # return total playtime over the past week
+
+    
     return
 
 def get_games_list(games_path):
@@ -81,11 +86,30 @@ def record_game_start(conn: sqlite3.Connection, cursor: sqlite3.Cursor, exe_name
     cursor.execute('''insert into gaming values (?, julianday('now'), NULL, NULL);''', (exe_name,))
     conn.commit()
 
-
     return
 
-def record_game_end():
+def from_Julian(date_in_float: float):
+
+    
+    return julian.from_jd(date_in_float, fmt='mjd')
+
+def to_Julian(date_to_convert):
+
+    return julian.to_jd(date_to_convert +datetime.timedelta(hours=12), fmt='jd')
+
+
+def record_game_end(conn: sqlite3.Connection, cursor: sqlite3.Cursor):
 
     # will also calculate time of game period
+    cursor.execute('''update gaming set 
+    session_end = julianday('now'), 
+    time_played = (julianday('now') - session_start)
+    order BY
+    session_start desc
+    LIMIT 1;''')
+    
+    conn.commit()
     return
+
+
 main()
